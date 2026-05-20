@@ -1,219 +1,216 @@
 #include <stdio.h>
+#define BRANDS 5
+#define TYPES 4
+#define DAYS 365
 int main() {
 /* Name: Sajed
 * ID: 325949089
 */
-int option = 0;
-while (option != 7) {
-printf("Choose an option:\n");
-printf("\t1. Happy Face\n");
-printf("\t2. Balanced Number\n");
-printf("\t3. Generous Number\n");
-printf("\t4. Circle Of Joy\n");
-printf("\t5. Happy Numbers\n");
-printf("\t6. Festival Of Laughter\n");
-printf("\t7. Exit\n");
-if (scanf("%d", &option) != 1) {
+int cube[DAYS][BRANDS][TYPES];
+int brand_counters[DAYS][BRANDS];
+int current_day = 0;
+for (int d = 0; d < DAYS; d++) {
+for (int b = 0; b < BRANDS; b++) {
+brand_counters[d][b] = 0;
+for (int t = 0; t < TYPES; t++) {
+cube[d][b][t] = -1;
+}
+}
+}
+const char* brand_names[BRANDS] = {"Toyoga", "HyunNight", "Mazduh", "FolksVegan", "Key-Yuh"};
+const char* type_names[TYPES] = {"SUV", "Sedan", "Coupe", "GT"};
+int choice = 0;
+while (choice != 7) {
+printf("Welcome to the Cars Data Cube! What would you like to do?\n");
+printf("1.Enter Daily Data For A Brand\n");
+printf("2.Populate A Day Of Sales For All Brands\n");
+printf("3.Provide Daily Stats\n");
+printf("4.Print All Data\n");
+printf("5.Provide Overall (simple) Insights\n");
+printf("6.Provide Average Delta Metrics\n");
+printf("7.exit\n");
+if (scanf("%d", &choice) != 1) {
 scanf("%*s");
-option = 0;
+printf("Invalid input\n");
+choice = 0;
+continue;
 }
-if (option == 1) {
-char eye, nose, mouth;
-int size;
-printf("Enter symbols for the eyes, nose, and mouth:\n");
-scanf(" %c %c %c", &eye, &nose, &mouth);
-printf("Enter face size:\n");
-scanf("%d", &size);
-while (size <= 0 || size % 2 == 0) {
-printf("The face's size must be an odd and positive number, please try again:\n");
-scanf("%d", &size);
+if (choice < 1 || choice > 7) {
+printf("Invalid input\n");
+continue;
 }
-printf("%c", eye);
-for (int i = 0; i < size; i++) {
-printf(" ");
+if (choice == 1) {
+int brand_idx;
+scanf("%d", &brand_idx);
+if (brand_idx < 0 || brand_idx >= BRANDS) {
+printf("This brand is not valid\n");
+continue;
 }
-printf("%c\n", eye);
-for (int i = 0; i < (size / 2) + 1; i++) {
-printf(" ");
+for (int t = 0; t < TYPES; t++) {
+scanf("%d", &cube[current_day][brand_idx][t]);
 }
-printf("%c\n", nose);
-printf("/");
-for (int i = 0; i < size; i++) {
-printf("%c", mouth);
+} else if (choice == 2) {
+int done_brands = 0;
+while (done_brands < BRANDS) {
+printf("No data for brands");
+int first = 1;
+for (int b = 0; b < BRANDS; b++) {
+if (brand_counters[current_day][b] == 0) {
+if (!first) {
+printf(",");
 }
-printf("\\n");
-} else if (option == 2) {
-long long num;
-printf("Enter a number:\n");
-scanf("%lld", &num);
-while (num <= 0) {
-printf("Only positive number is allowed, please try again:\n");
-scanf("%lld", &num);
-}
-long long temp = num;
-int digits = 0;
-while (temp > 0) {
-digits++;
-temp /= 10;
-}
-int half = digits / 2;
-long long left_sum = 0, right_sum = 0;
-temp = num;
-for (int i = 0; i < digits; i++) {
-int digit = temp % 10;
-if (digits % 2 == 0) {
-if (i < half) {
-right_sum += digit;
-} else {
-left_sum += digit;
-}
-} else {
-if (i < half) {
-right_sum += digit;
-} else if (i > half) {
-left_sum += digit;
+printf(" %s", brand_names[b]);
+first = 0;
 }
 }
-temp /= 10;
+printf("\nPlease complete the data\n");
+int input_brand;
+if (scanf("%d", &input_brand) != 1) {
+scanf("%*s");
+printf("This brand is not valid\n");
+continue;
 }
-if (left_sum == right_sum) {
-printf("This number is balanced and brings harmony!\n");
-} else {
-printf("This number isn't balanced and destroys harmony.\n");
+if (input_brand < 0 || input_brand >= BRANDS || brand_counters[current_day][input_brand] == 1) {
+printf("This brand is not valid\n");
+int dummy;
+for (int t = 0; t < TYPES; t++) {
+scanf("%d", &dummy);
 }
-} else if (option == 3) {
-int num;
-printf("Enter a number:\n");
-scanf("%d", &num);
-while (num <= 0) {
-printf("Only positive number is allowed, please try again:\n");
-scanf("%d", &num);
+continue;
 }
-int sum = 0;
-for (int i = 1; i <= num / 2; i++) {
-if (num % i == 0) {
-sum += i;
+for (int t = 0; t < TYPES; t++) {
+scanf("%d", &cube[current_day][input_brand][t]);
 }
+brand_counters[current_day][input_brand] = 1;
+done_brands++;
 }
-if (sum > num) {
-printf("This number is generous!\n");
-} else {
-printf("This number does not share.\n");
+current_day++;
+} else if (choice == 3) {
+int target_day;
+printf("What day would you like to analyze?\n");
+while (1) {
+if (scanf("%d", &target_day) != 1) {
+scanf("%*s");
+printf("Please enter a valid day.\nWhat day would you like to analyze?\n");
+continue;
 }
-} else if (option == 4) {
-int num;
-printf("Enter a number:\n");
-scanf("%d", &num);
-while (num <= 0) {
-printf("Only positive number is allowed, please try again:\n");
-scanf("%d", &num);
+if (target_day < 1 || target_day > current_day) {
+printf("Please enter a valid day.\nWhat day would you like to analyze?\n");
+continue;
 }
-int is_prime1 = 1;
-if (num <= 1) is_prime1 = 0;
-for (int i = 2; i * i <= num; i++) {
-if (num % i == 0) {
-is_prime1 = 0;
 break;
 }
+int d_idx = target_day - 1;
+int total_sales = 0;
+int brand_totals[BRANDS] = {0};
+int type_totals[TYPES] = {0};
+for (int b = 0; b < BRANDS; b++) {
+for (int t = 0; t < TYPES; t++) {
+if (cube[d_idx][b][t] != -1) {
+total_sales += cube[d_idx][b][t];
+brand_totals[b] += cube[d_idx][b][t];
+type_totals[t] += cube[d_idx][b][t];
 }
-int temp = num;
-int rev = 0;
-while (temp > 0) {
-rev = rev * 10 + (temp % 10);
-temp /= 10;
 }
-int is_prime2 = 1;
-if (rev <= 1) is_prime2 = 0;
-for (int i = 2; i * i <= rev; i++) {
-if (rev % i == 0) {
-is_prime2 = 0;
+}
+printf("In day number %d:\n", target_day);
+printf("The sales total was %d\n", total_sales);
+int max_brand = 0;
+for (int b = 1; b < BRANDS; b++) {
+if (brand_totals[b] > brand_totals[max_brand]) {
+max_brand = b;
+}
+}
+printf("The best sold brand with %d sales was %s\n", brand_totals[max_brand], brand_names[max_brand]);
+int max_type = 0;
+for (int t = 1; t < TYPES; t++) {
+if (type_totals[t] > type_totals[max_type]) {
+max_type = t;
+}
+}
+printf("The best sold type with %d sales was %s\n", type_totals[max_type], type_names[max_type]);
+} else if (choice == 4) {
+for (int b = 0; b < BRANDS; b++) {
+int has_data = 0;
+for (int d = 0; d < current_day; d++) {
+if (brand_counters[d][b] == 1) {
+has_data = 1;
 break;
-}
-}
-if (is_prime1 && is_prime2) {
-printf("This number completes the circle of joy!\n");
-} else {
-printf("The circle remains incomplete.\n");
-}
-} else if (option == 5) {
-int n;
-printf("Enter a number:\n");
-scanf("%d", &n);
-while (n <= 0) {
-printf("Only positive number is allowed, please try again:\n");
-scanf("%d", &n);
-}
-printf("Between 1 and %d only these numbers bring happiness: ", n);
-for (int i = 1; i <= n; i++) {
-int slow = i, fast = i;
-do {
-int sum = 0, t = slow;
-while (t > 0) {
-int d = t % 10;
-sum += d * d;
-t /= 10;
-}
-slow = sum;
-sum = 0; t = fast;
-while (t > 0) {
-int d = t % 10;
-sum += d * d;
-t /= 10;
-}
-t = sum; sum = 0;
-while (t > 0) {
-int d = t % 10;
-sum += d * d;
-t /= 10;
-}
-fast = sum;
-} while (slow != fast && slow != 1);
-if (slow == 1) {
-printf("%d ", i);
 }
 }
 printf("\n");
-} else if (option == 6) {
-int smile = 0, cheer = 0;
-int valid_format = 0;
-printf("Enter a smile and cheer number:\n");
-while (!valid_format) {
-int scan_res = scanf(" smile: %d , cheer: %d", &smile, &cheer);
-if (scan_res == 2 && smile > 0 && cheer > 0 && smile != cheer) {
-valid_format = 1;
+printf("Sales for %s:\n", brand_names[b]);
+if (has_data) {
+for (int d = 0; d < current_day; d++) {
+if (brand_counters[d][b] == 1) {
+printf("Day %d- ", d + 1);
+for (int t = 0; t < TYPES; t++) {
+printf("%s: %d ", type_names[t], cube[d][b][t]);
+}
+printf("\n");
+}
+}
+}
+}
+printf("\n");
+} else if (choice == 5) {
+int overall_brand_totals[BRANDS] = {0};
+int overall_type_totals[TYPES] = {0};
+int overall_day_totals[DAYS] = {0};
+for (int d = 0; d < current_day; d++) {
+for (int b = 0; b < BRANDS; b++) {
+for (int t = 0; t < TYPES; t++) {
+if (cube[d][b][t] != -1) {
+overall_brand_totals[b] += cube[d][b][t];
+overall_type_totals[t] += cube[d][b][t];
+overall_day_totals[d] += cube[d][b][t];
+}
+}
+}
+}
+int best_brand = 0;
+for (int b = 1; b < BRANDS; b++) {
+if (overall_brand_totals[b] > overall_brand_totals[best_brand]) {
+best_brand = b;
+}
+}
+printf("The best-selling brand overall is %s:%d$\n", brand_names[best_brand], overall_brand_totals[best_brand]);
+int best_type = 0;
+for (int t = 1; t < TYPES; t++) {
+if (overall_type_totals[t] > overall_type_totals[best_type]) {
+best_type = t;
+}
+}
+printf("The best-selling type of car is %s:%d$\n", type_names[best_type], overall_type_totals[best_type]);
+int best_day = 0;
+for (int d = 1; d < current_day; d++) {
+if (overall_day_totals[d] > overall_day_totals[best_day]) {
+best_day = d;
+}
+}
+printf("The most profitable day was day number %d:%d$\n", best_day + 1, overall_day_totals[best_day]);
+} else if (choice == 6) {
+for (int b = 0; b < BRANDS; b++) {
+float total_delta = 0;
+int count = 0;
+for (int d = 0; d < current_day - 1; d++) {
+int current_day_sum = 0;
+int next_day_sum = 0;
+for (int t = 0; t < TYPES; t++) {
+current_day_sum += cube[d][b][t];
+next_day_sum += cube[d+1][b][t];
+}
+total_delta += (next_day_sum - current_day_sum);
+count++;
+}
+if (count > 0) {
+printf("Brand: %s, Average Delta: %f\n", brand_names[b], total_delta / count);
 } else {
-scan_res = scanf(" cheer: %d , smile: %d", &cheer, &smile);
-if (scan_res == 2 && smile > 0 && cheer > 0 && smile != cheer) {
-valid_format = 1;
-} else {
-printf("Only 2 different positive numbers in the given format are allowed for the festival, please try again:\n");
-scanf("%*[^\n]");
-scanf("%*c");
+printf("Brand: %s, Average Delta: 0.000000\n", brand_names[b]);
 }
 }
-}
-int max_num;
-printf("Enter maximum number for the festival:\n");
-scanf("%d", &max_num);
-while (max_num <= 0) {
-printf("Only positive maximum number is allowed, please try again:\n");
-scanf("%d", &max_num);
-}
-for (int i = 1; i <= max_num; i++) {
-if (i % smile == 0 && i % cheer == 0) {
-printf("Festival!\n");
-} else if (i % smile == 0) {
-printf("Smile!\n");
-} else if (i % cheer == 0) {
-printf("Cheer!\n");
-} else {
-printf("%d\n", i);
-}
-}
-} else if (option == 7) {
-printf("Thank you for your journey through Numeria!\n");
-} else {
-printf("This option is not available, please try again.\n");
+} else if (choice == 7) {
+printf("Goodbye!\n");
 }
 }
 return 0;
