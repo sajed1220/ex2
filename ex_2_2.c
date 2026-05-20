@@ -129,13 +129,11 @@ printf("\n");
 for (int b = 0; b < BRANDS; b++) {
 printf("Sales for %s:\n", brand_names[b]);
 for (int d = 0; d < current_day; d++) {
-if (brand_counters[d][b] == 1) {
 printf("Day %d- ", d + 1);
 for (int t = 0; t < TYPES; t++) {
 printf("%s: %d ", type_names[t], cube[d][b][t]);
 }
 printf("\n");
-}
 }
 }
 printf("\n");
