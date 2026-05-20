@@ -129,11 +129,10 @@ printf("\n");
 for (int b = 0; b < BRANDS; b++) {
 printf("Sales for %s:\n", brand_names[b]);
 for (int d = 0; d < current_day; d++) {
-printf("Day %d- ", d + 1);
-for (int t = 0; t < TYPES; t++) {
-printf("%s: %d ", type_names[t], cube[d][b][t]);
+if (brand_counters[d][b] == 1) {
+printf("Day %d- SUV: %d Sedan: %d Coupe: %d GT: %d\n",
+d + 1, cube[d][b][0], cube[d][b][1], cube[d][b][2], cube[d][b][3]);
 }
-printf("\n");
 }
 }
 printf("\n");
