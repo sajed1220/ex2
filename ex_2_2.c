@@ -51,8 +51,16 @@ scanf("%d", &cube[current_day][brand_idx][t]);
 }
 brand_counters[current_day][brand_idx] = 1;
 } else if (choice == 2) {
-int done_brands = 0;
-while (done_brands < BRANDS) {
+while (1) {
+int missing_count = 0;
+for (int b = 0; b < BRANDS; b++) {
+if (brand_counters[current_day][b] == 0) {
+missing_count++;
+}
+}
+if (missing_count == 0) {
+break;
+}
 printf("No data for brands");
 for (int b = 0; b < BRANDS; b++) {
 if (brand_counters[current_day][b] == 0) {
@@ -61,24 +69,11 @@ printf(" %s", brand_names[b]);
 }
 printf("\nPlease complete the data\n");
 int input_brand;
-if (scanf("%d", &input_brand) != 1) {
-scanf("%*s");
-printf("This brand is not valid\n");
-continue;
-}
-if (input_brand < 0 || input_brand >= BRANDS || brand_counters[current_day][input_brand] == 1) {
-printf("This brand is not valid\n");
-int dummy;
-for (int t = 0; t < TYPES; t++) {
-scanf("%d", &dummy);
-}
-continue;
-}
+scanf("%d", &input_brand);
 for (int t = 0; t < TYPES; t++) {
 scanf("%d", &cube[current_day][input_brand][t]);
 }
 brand_counters[current_day][input_brand] = 1;
-done_brands++;
 }
 current_day++;
 } else if (choice == 3) {
@@ -165,12 +160,17 @@ best_type = t;
 }
 printf("The best-selling type of car is %s: %d$\n", type_names[best_type], overall_type_totals[best_type]);
 int best_day = 0;
+int max_day_sales = 0;
+if (current_day > 0) {
+max_day_sales = overall_day_totals[0];
 for (int d = 1; d < current_day; d++) {
-if (overall_day_totals[d] > overall_day_totals[best_day]) {
+if (overall_day_totals[d] > max_day_sales) {
+max_day_sales = overall_day_totals[d];
 best_day = d;
 }
 }
-printf("The most profitable day was day number %d: %d$\n", best_day + 1, overall_day_totals[best_day]);
+}
+printf("The most profitable day was day number %d: %d$\n", best_day + 1, max_day_sales);
 } else if (choice == 6) {
 for (int b = 0; b < BRANDS; b++) {
 float total_delta = 0;
@@ -186,7 +186,7 @@ total_delta += (next_day_sum - current_day_sum);
 count++;
 }
 if (count > 0) {
-printf("Brand: %s, Average Delta: %f\n", brand_names[b], total_delta / count);
+printf("Brand: %s, Average Delta: %f\n", brand_names[b], total_delta / (float)count);
 } else {
 printf("Brand: %s, Average Delta: 0.000000\n", brand_names[b]);
 }
