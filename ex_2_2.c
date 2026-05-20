@@ -53,14 +53,9 @@ scanf("%d", &cube[current_day][brand_idx][t]);
 int done_brands = 0;
 while (done_brands < BRANDS) {
 printf("No data for brands");
-int first = 1;
 for (int b = 0; b < BRANDS; b++) {
 if (brand_counters[current_day][b] == 0) {
-if (!first) {
-printf(",");
-}
 printf(" %s", brand_names[b]);
-first = 0;
 }
 }
 printf("\nPlease complete the data\n");
@@ -130,17 +125,9 @@ max_type = t;
 }
 printf("The best sold type with %d sales was %s\n", type_totals[max_type], type_names[max_type]);
 } else if (choice == 4) {
-for (int b = 0; b < BRANDS; b++) {
-int has_data = 0;
-for (int d = 0; d < current_day; d++) {
-if (brand_counters[d][b] == 1) {
-has_data = 1;
-break;
-}
-}
 printf("\n");
+for (int b = 0; b < BRANDS; b++) {
 printf("Sales for %s:\n", brand_names[b]);
-if (has_data) {
 for (int d = 0; d < current_day; d++) {
 if (brand_counters[d][b] == 1) {
 printf("Day %d- ", d + 1);
@@ -148,7 +135,6 @@ for (int t = 0; t < TYPES; t++) {
 printf("%s: %d ", type_names[t], cube[d][b][t]);
 }
 printf("\n");
-}
 }
 }
 }
@@ -174,21 +160,21 @@ if (overall_brand_totals[b] > overall_brand_totals[best_brand]) {
 best_brand = b;
 }
 }
-printf("The best-selling brand overall is %s:%d$\n", brand_names[best_brand], overall_brand_totals[best_brand]);
+printf("The best-selling brand overall is %s: %d$\n", brand_names[best_brand], overall_brand_totals[best_brand]);
 int best_type = 0;
 for (int t = 1; t < TYPES; t++) {
 if (overall_type_totals[t] > overall_type_totals[best_type]) {
 best_type = t;
 }
 }
-printf("The best-selling type of car is %s:%d$\n", type_names[best_type], overall_type_totals[best_type]);
+printf("The best-selling type of car is %s: %d$\n", type_names[best_type], overall_type_totals[best_type]);
 int best_day = 0;
 for (int d = 1; d < current_day; d++) {
 if (overall_day_totals[d] > overall_day_totals[best_day]) {
 best_day = d;
 }
 }
-printf("The most profitable day was day number %d:%d$\n", best_day + 1, overall_day_totals[best_day]);
+printf("The most profitable day was day number %d: %d$\n", best_day + 1, overall_day_totals[best_day]);
 } else if (choice == 6) {
 for (int b = 0; b < BRANDS; b++) {
 float total_delta = 0;
