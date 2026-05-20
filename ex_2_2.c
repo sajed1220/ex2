@@ -18,7 +18,6 @@ cube[d][b][t] = -1;
 }
 }
 const char* brand_names[BRANDS] = {"Toyoga", "HyunNight", "Mazduh", "FolksVegan", "Key-Yuh"};
-const char* type_names[TYPES] = {"SUV", "Sedan", "Coupe", "GT"};
 int choice = 0;
 while (choice != 7) {
 printf("Welcome to the Cars Data Cube! What would you like to do?\n");
@@ -123,16 +122,15 @@ if (type_totals[t] > type_totals[max_type]) {
 max_type = t;
 }
 }
+const char* type_names[TYPES] = {"SUV", "Sedan", "Coupe", "GT"};
 printf("The best sold type with %d sales was %s\n", type_totals[max_type], type_names[max_type]);
 } else if (choice == 4) {
 printf("\n");
 for (int b = 0; b < BRANDS; b++) {
 printf("Sales for %s:\n", brand_names[b]);
 for (int d = 0; d < current_day; d++) {
-if (brand_counters[d][b] == 1) {
 printf("Day %d- SUV: %d Sedan: %d Coupe: %d GT: %d\n",
 d + 1, cube[d][b][0], cube[d][b][1], cube[d][b][2], cube[d][b][3]);
-}
 }
 }
 printf("\n");
@@ -164,6 +162,7 @@ if (overall_type_totals[t] > overall_type_totals[best_type]) {
 best_type = t;
 }
 }
+const char* type_names[TYPES] = {"SUV", "Sedan", "Coupe", "GT"};
 printf("The best-selling type of car is %s: %d$\n", type_names[best_type], overall_type_totals[best_type]);
 int best_day = 0;
 for (int d = 1; d < current_day; d++) {
